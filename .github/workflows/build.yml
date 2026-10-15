@@ -10,9 +10,13 @@ jobs:
           distribution: temurin
           java-version: 17
       - run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
-      - run: chmod +x gradlew
-      - run: ./gradlew assembleDebug
+      - run: |
+          G=$(find . -name gradlew | head -1)
+          echo "Projeto encontrado em: $G"
+          cd "$(dirname "$G")"
+          chmod +x gradlew
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: "**/build/outputs/apk/debug/*.apk"
